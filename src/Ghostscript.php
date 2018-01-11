@@ -155,7 +155,7 @@ class Ghostscript
             $command[] = '-dUse' . $this->pageBox;
         }
 
-        $command[] = '-dNOPLATFONTS -sOutputFile=%stdout -q -';
+        $command[] = '-dNOPLATFONTS -dBATCH -dNOPAUSE -dSAFER -sOutputFile=%stdout -q -';
 
         $command = implode(' ', $command);
 
