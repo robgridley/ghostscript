@@ -137,11 +137,11 @@ class Ghostscript
     /**
      * Convert the specified PDF to an image.
      *
-     * @param string $pdf
+     * @param string|resource $pdf
      * @param int $page
      * @return string
      */
-    public function convert(string $pdf, int $page = 1): string
+    public function convert($pdf, int $page = 1): string
     {
         $command[] = $this->path;
         $command[] = $this->device->getArguments();
@@ -166,10 +166,10 @@ class Ghostscript
      * Execute the specified command.
      *
      * @param string $command
-     * @param string $input
+     * @param string|resource $input
      * @return string
      */
-    protected function execute(string $command, string $input): string
+    protected function execute(string $command, $input): string
     {
         $process = new Process($command);
 
