@@ -1,6 +1,6 @@
 # Ghostscript PHP
 
-Yet another Ghostscript PHP wrapper for converting PDFs (or PS/EPS files) to images. This library accepts strings or streams and input and returns the output as a string.
+Yet another Ghostscript PHP wrapper for converting PDFs (or PS files) to images. This library accepts strings or streams as input and returns the output as a string.
 
 ## Installation
 
