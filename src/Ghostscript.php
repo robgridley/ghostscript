@@ -55,6 +55,13 @@ class Ghostscript
     protected $resolution = 72;
 
     /**
+     * The fixed output size.
+     *
+     * @var array|null
+     */
+    protected $fitPage;
+
+    /**
      * Create a new Ghostscript instance.
      *
      * @param Device $device
@@ -135,45 +142,63 @@ class Ghostscript
     }
 
     /**
+     * Set the fixed output size (in points).
+     *
+     * @param int $width
+     * @param int $height
+     */
+    public function setFitPage(int $width, int $height)
+    {
+        $this->fitPage = [$width, $height];
+    }
+
+    /**
      * Convert the specified PDF to an image.
      *
-     * @param string|resource $pdf
+     * @param string|resource $data
      * @param int $page
      * @return string
      */
-    public function convert($pdf, int $page = 1): string
+    public function convert($data, int $page = 1): string
     {
+        $file = new TempFile($data);
+
         $command[] = $this->path;
         $command[] = $this->device->getArguments();
 
         $command[] = sprintf('-dFirstPage=%d -dLastPage=%d', $page, $page);
         $command[] = sprintf('-dGraphicsAlphaBits=%d', $this->graphicsAntiAliasing);
         $command[] = sprintf('-dTextAlphaBits=%d', $this->textAntiAliasing);
-        $command[] = sprintf('-r%d',$this->getResolution());
+        $command[] = sprintf('-r%d', $this->getResolution());
+
+        if (!is_null($this->fitPage)) {
+            $command[] = sprintf('-dFitPage -dFIXEDMEDIA -dDEVICEWIDTHPOINTS=%d -dDEVICEHEIGHTPOINTS=%d',
+                ...$this->fitPage);
+        } else {
+            $command[] = '-dEPSCrop';
+        }
 
         if (!is_null($this->pageBox)) {
             $command[] = '-dUse' . $this->pageBox;
         }
 
-        $command[] = '-dNOPLATFONTS -dBATCH -dNOPAUSE -dSAFER -sOutputFile=%stdout -q -';
+        $command[] = '-dNOPLATFONTS -dBATCH -dNOPAUSE -dSAFER -sOutputFile=%stdout -q';
+        $command[] = $file->getPath();
 
         $command = implode(' ', $command);
 
-        return $this->execute($command, $pdf);
+        return $this->execute($command);
     }
 
     /**
      * Execute the specified command.
      *
      * @param string $command
-     * @param string|resource $input
      * @return string
      */
-    protected function execute(string $command, $input): string
+    protected function execute(string $command): string
     {
         $process = new Process($command);
-
-        $process->setInput($input);
         $process->run();
 
         if (!$process->isSuccessful()) {

@@ -1,6 +1,6 @@
 # Ghostscript PHP
 
-Yet another Ghostscript PHP wrapper for converting PDFs to images. This library passes strings to and from stdin and stdout rather than using input and output files.
+Yet another Ghostscript PHP wrapper for converting PDFs (or PS/EPS files) to images. This library accepts strings or streams and input and returns the output as a string.
 
 ## Installation
 
