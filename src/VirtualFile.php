@@ -3,8 +3,9 @@
 namespace RobGridley\Ghostscript;
 
 use RuntimeException;
+use RobGridley\Ghostscript\Contracts\LocalFile;
 
-class TempFile
+class VirtualFile implements LocalFile
 {
     /**
      * The path to the temp file.
@@ -16,7 +17,7 @@ class TempFile
     /**
      * Create a new temp file instance.
      *
-     * @param string|resource $data
+     * @param string|array|resource $data
      */
     public function __construct($data)
     {
@@ -24,7 +25,7 @@ class TempFile
             throw new RuntimeException('Failed to create the temp file');
         }
 
-        if (false == file_put_contents($path, $data)) {
+        if (false === file_put_contents($path, $data)) {
             throw new RuntimeException('Failed to write data to the temp file');
         }
 
@@ -44,7 +45,7 @@ class TempFile
      *
      * @return string
      */
-    public function getPath(): string
+    public function getLocalPath(): string
     {
         return $this->path;
     }

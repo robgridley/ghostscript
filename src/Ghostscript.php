@@ -4,6 +4,7 @@ namespace RobGridley\Ghostscript;
 
 use Symfony\Component\Process\Process;
 use RobGridley\Ghostscript\Contracts\Device;
+use RobGridley\Ghostscript\Contracts\LocalFile;
 use RobGridley\Ghostscript\Contracts\DownScaling;
 
 class Ghostscript
@@ -155,14 +156,12 @@ class Ghostscript
     /**
      * Convert the specified PDF to an image.
      *
-     * @param string|resource $data
+     * @param LocalFile $file
      * @param int $page
      * @return string
      */
-    public function convert($data, int $page = 1): string
+    public function convert(LocalFile $file, int $page = 1): string
     {
-        $file = new TempFile($data);
-
         $command[] = $this->path;
         $command[] = $this->device->getArguments();
 
@@ -183,7 +182,7 @@ class Ghostscript
         }
 
         $command[] = '-dNOPLATFONTS -dBATCH -dNOPAUSE -dSAFER -sOutputFile=%stdout -q';
-        $command[] = $file->getPath();
+        $command[] = $file->getLocalPath();
 
         $command = implode(' ', $command);
 
