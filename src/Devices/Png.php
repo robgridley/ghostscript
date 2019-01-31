@@ -9,20 +9,20 @@ abstract class Png implements Device
     /**
      * Get the command arguments.
      *
-     * @return string
+     * @return array
      */
-    public function getArguments(): string
+    public function getArguments(): array
     {
-        $arguments[] = sprintf('-sDEVICE=%s', $this->device);
+        $arguments[] = "-sDEVICE={$this->device}";
 
         if (isset($this->backgroundColor)) {
-            $arguments[] = sprintf('-dBackgroundColor=%s', $this->backgroundColor);
+            $arguments[] = "-dBackgroundColor={$this->backgroundColor}";
         }
 
         if (isset($this->downScaleFactor)) {
-            $arguments[] = sprintf('-dDownScaleFactor=%d', $this->downScaleFactor);
+            $arguments[] = "-dDownScaleFactor={$this->downScaleFactor}";
         }
 
-        return implode(' ', $arguments);
+        return $arguments;
     }
 }

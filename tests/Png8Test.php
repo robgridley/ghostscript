@@ -10,6 +10,6 @@ class Png8Test extends TestCase
     {
         $device = new Png8;
         $this->assertInstanceOf(Device::class, $device);
-        $this->assertEquals('-sDEVICE=png256', $device->getArguments());
+        $this->assertEquals(['-sDEVICE=png256'], $device->getArguments());
     }
 }

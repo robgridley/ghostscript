@@ -12,14 +12,14 @@ class Png24Test extends TestCase
         $device = new Png24;
         $this->assertInstanceOf(Device::class, $device);
         $this->assertInstanceOf(DownScaling::class, $device);
-        $this->assertEquals('-sDEVICE=png16m -dDownScaleFactor=1', $device->getArguments());
+        $this->assertEquals(['-sDEVICE=png16m', '-dDownScaleFactor=1'], $device->getArguments());
     }
 
     public function testSetDownScaleFactor()
     {
         $device = new Png24;
         $device->setDownScaleFactor(8);
-        $this->assertEquals('-sDEVICE=png16m -dDownScaleFactor=8', $device->getArguments());
+        $this->assertEquals(['-sDEVICE=png16m', '-dDownScaleFactor=8'], $device->getArguments());
     }
 
     public function testSetDownScaleFactorTooHigh()

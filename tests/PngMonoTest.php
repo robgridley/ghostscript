@@ -10,6 +10,6 @@ class PngMonoTest extends TestCase
     {
         $device = new PngMono;
         $this->assertInstanceOf(Device::class, $device);
-        $this->assertEquals('-sDEVICE=pngmono', $device->getArguments());
+        $this->assertEquals(['-sDEVICE=pngmono'], $device->getArguments());
     }
 }

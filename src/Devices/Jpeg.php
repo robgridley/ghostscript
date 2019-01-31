@@ -38,10 +38,13 @@ class Jpeg implements Device
     /**
      * Get the command arguments.
      *
-     * @return string
+     * @return array
      */
-    public function getArguments(): string
+    public function getArguments(): array
     {
-        return sprintf('-sDEVICE=%s -dJPEGQ=%d', $this->device, $this->quality);
+        return [
+            "-sDEVICE={$this->device}",
+            "-dJPEGQ={$this->quality}",
+        ];
     }
 }

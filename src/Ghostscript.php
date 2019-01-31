@@ -150,7 +150,7 @@ class Ghostscript
      */
     public function setFitPage(int $width, int $height)
     {
-        $this->fitPage = [$width, $height];
+        $this->fitPage = compact('width', 'height');
     }
 
     /**
@@ -163,16 +163,19 @@ class Ghostscript
     public function convert(LocalFile $file, int $page = 1): string
     {
         $command[] = $this->path;
-        $command[] = $this->device->getArguments();
+        array_push($command, ...$this->device->getArguments());
 
-        $command[] = sprintf('-dFirstPage=%d -dLastPage=%d', $page, $page);
-        $command[] = sprintf('-dGraphicsAlphaBits=%d', $this->graphicsAntiAliasing);
-        $command[] = sprintf('-dTextAlphaBits=%d', $this->textAntiAliasing);
-        $command[] = sprintf('-r%d', $this->getResolution());
+        $command[] = "-dFirstPage=$page";
+        $command[] = "-dLastPage=$page";
+        $command[] = "-dGraphicsAlphaBits={$this->graphicsAntiAliasing}";
+        $command[] = "-dTextAlphaBits={$this->textAntiAliasing}";
+        $command[] = '-r' . $this->getResolution();
 
         if (!is_null($this->fitPage)) {
-            $command[] = sprintf('-dFitPage -dFIXEDMEDIA -dDEVICEWIDTHPOINTS=%d -dDEVICEHEIGHTPOINTS=%d',
-                ...$this->fitPage);
+            $command[] = '-dFIXEDMEDIA';
+            $command[] = '-dFitPage';
+            $command[] = "-dDEVICEWIDTHPOINTS={$this->fitPage['width']}";
+            $command[] = "-dDEVICEHEIGHTPOINTS={$this->fitPage['height']}";
         } else {
             $command[] = '-dEPSCrop';
         }
@@ -181,10 +184,13 @@ class Ghostscript
             $command[] = '-dUse' . $this->pageBox;
         }
 
-        $command[] = '-dNOPLATFONTS -dBATCH -dNOPAUSE -dSAFER -sOutputFile=%stdout -q';
+        $command[] = '-dNOPLATFONTS';
+        $command[] = '-dBATCH';
+        $command[] = '-dNOPAUSE';
+        $command[] = '-dSAFER';
+        $command[] = '-sOutputFile=%stdout';
+        $command[] = '-q';
         $command[] = $file->getLocalPath();
-
-        $command = implode(' ', $command);
 
         return $this->execute($command);
     }
@@ -192,10 +198,10 @@ class Ghostscript
     /**
      * Execute the specified command.
      *
-     * @param string $command
+     * @param array $command
      * @return string
      */
-    protected function execute(string $command): string
+    protected function execute(array $command): string
     {
         $process = new Process($command);
         $process->run();

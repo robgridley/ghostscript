@@ -10,14 +10,14 @@ class JpegTest extends TestCase
     {
         $device = new Jpeg;
         $this->assertInstanceOf(Device::class, $device);
-        $this->assertEquals('-sDEVICE=jpeg -dJPEGQ=0', $device->getArguments());
+        $this->assertEquals(['-sDEVICE=jpeg', '-dJPEGQ=0'], $device->getArguments());
     }
 
     public function testSetQuality()
     {
         $device = new Jpeg;
         $device->setQuality(85);
-        $this->assertEquals('-sDEVICE=jpeg -dJPEGQ=85', $device->getArguments());
+        $this->assertEquals(['-sDEVICE=jpeg', '-dJPEGQ=85'], $device->getArguments());
     }
 
     public function testSetQualityTooHigh()

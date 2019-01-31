@@ -10,6 +10,6 @@ class Png4Test extends TestCase
     {
         $device = new Png4;
         $this->assertInstanceOf(Device::class, $device);
-        $this->assertEquals('-sDEVICE=png16', $device->getArguments());
+        $this->assertEquals(['-sDEVICE=png16'], $device->getArguments());
     }
 }

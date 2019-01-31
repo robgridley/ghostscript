@@ -12,14 +12,14 @@ class PngAlphaTest extends TestCase
         $device = new PngAlpha;
         $this->assertInstanceOf(Device::class, $device);
         $this->assertInstanceOf(DownScaling::class, $device);
-        $this->assertEquals('-sDEVICE=pngalpha -dDownScaleFactor=1', $device->getArguments());
+        $this->assertEquals(['-sDEVICE=pngalpha', '-dDownScaleFactor=1'], $device->getArguments());
     }
 
     public function testSetDownScaleFactor()
     {
         $device = new PngAlpha;
         $device->setDownScaleFactor(8);
-        $this->assertEquals('-sDEVICE=pngalpha -dDownScaleFactor=8', $device->getArguments());
+        $this->assertEquals(['-sDEVICE=pngalpha', '-dDownScaleFactor=8'], $device->getArguments());
     }
 
     public function testSetDownScaleFactorTooHigh()
@@ -40,6 +40,6 @@ class PngAlphaTest extends TestCase
     {
         $device = new PngAlpha;
         $device->setBackgroundColor('0000ff');
-        $this->assertEquals('-sDEVICE=pngalpha -dBackgroundColor=16#0000ff -dDownScaleFactor=1', $device->getArguments());
+        $this->assertEquals(['-sDEVICE=pngalpha', '-dBackgroundColor=16#0000ff', '-dDownScaleFactor=1'], $device->getArguments());
     }
 }

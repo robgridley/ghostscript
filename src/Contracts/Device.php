@@ -7,7 +7,7 @@ interface Device
     /**
      * Get the command arguments.
      *
-     * @return string
+     * @return array
      */
-    public function getArguments(): string;
+    public function getArguments(): array;
 }
