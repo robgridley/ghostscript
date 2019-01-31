@@ -172,7 +172,10 @@ class Ghostscript
         $command[] = '-r' . $this->getResolution();
 
         if (!is_null($this->fitPage)) {
-            $command[] = '-dFIXEDMEDIA';
+            if ($this->fitPage['width'] != $this->fitPage['height']) {
+                $command[] = '-dFIXEDMEDIA';
+            }
+
             $command[] = '-dFitPage';
             $command[] = "-dDEVICEWIDTHPOINTS={$this->fitPage['width']}";
             $command[] = "-dDEVICEHEIGHTPOINTS={$this->fitPage['height']}";
