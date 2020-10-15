@@ -21,6 +21,13 @@ class Ghostscript
     protected $path = 'gs';
 
     /**
+     * The process timeout in seconds.
+     *
+     * @var int
+     */
+    protected $timeout = 60;
+
+    /**
      * The output device.
      *
      * @var Device
@@ -80,6 +87,16 @@ class Ghostscript
     public function setPath(string $path)
     {
         $this->path = $path;
+    }
+
+    /**
+     * Set the process timeout.
+     *
+     * @param int $seconds
+     */
+    public function setTimeout(int $seconds)
+    {
+        $this->timeout = $seconds;
     }
 
     /**
@@ -204,6 +221,7 @@ class Ghostscript
     protected function execute(array $command): string
     {
         $process = new Process($command);
+        $process->setTimeout($this->timeout);
         $process->run();
 
         if (!$process->isSuccessful()) {
