@@ -206,6 +206,7 @@ class Ghostscript
         $command[] = '-dNOPAUSE';
         $command[] = '-dSAFER';
         $command[] = '-sOutputFile=%stdout';
+        $command[] = '-sstdout=%stderr';
         $command[] = '-q';
         $command[] = $file->getLocalPath();
 
