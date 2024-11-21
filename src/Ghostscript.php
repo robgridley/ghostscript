@@ -2,10 +2,10 @@
 
 namespace RobGridley\Ghostscript;
 
-use Symfony\Component\Process\Process;
 use RobGridley\Ghostscript\Contracts\Device;
-use RobGridley\Ghostscript\Contracts\LocalFile;
 use RobGridley\Ghostscript\Contracts\DownScaling;
+use RobGridley\Ghostscript\Contracts\LocalFile;
+use Symfony\Component\Process\Process;
 
 class Ghostscript
 {
@@ -175,9 +175,10 @@ class Ghostscript
      *
      * @param LocalFile $file
      * @param int $page
+     * @param LocalFile|null $outputFile
      * @return string
      */
-    public function convert(LocalFile $file, int $page = 1): string
+    public function convert(LocalFile $file, int $page = 1, LocalFile $outputFile = null): string
     {
         $command[] = $this->path;
         array_push($command, ...$this->device->getArguments());
@@ -205,7 +206,11 @@ class Ghostscript
         $command[] = '-dBATCH';
         $command[] = '-dNOPAUSE';
         $command[] = '-dSAFER';
-        $command[] = '-sOutputFile=%stdout';
+        if (is_null($outputFile)) {
+            $command[] = '-sOutputFile=%stdout';
+        } else {
+            $command[] = "-sOutputFile={$outputFile->getLocalPath()}";
+        }
         $command[] = '-sstdout=%stderr';
         $command[] = '-q';
         $command[] = $file->getLocalPath();
