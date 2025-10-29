@@ -70,6 +70,13 @@ class Ghostscript
     protected $fitPage;
 
     /**
+     * The output ICC profile.
+     *
+     * @var LocalFile|null
+     */
+    protected $outputProfile = null;
+
+    /**
      * Create a new Ghostscript instance.
      *
      * @param Device $device
@@ -171,6 +178,17 @@ class Ghostscript
     }
 
     /**
+     * Set the output ICC profile.
+     *
+     * @param LocalFile $profile
+     * @return void
+     */
+    public function setOutputProfile(LocalFile $profile)
+    {
+        $this->outputProfile = $profile;
+    }
+
+    /**
      * Convert the specified PDF to an image.
      *
      * @param LocalFile $file
@@ -200,6 +218,10 @@ class Ghostscript
 
         if (!is_null($this->pageBox)) {
             $command[] = '-dUse' . $this->pageBox;
+        }
+
+        if (!is_null($this->outputProfile)) {
+            $command[] = "-sOutputICCProfile={$this->outputProfile->getLocalPath()}";
         }
 
         $command[] = '-dNOPLATFONTS';
